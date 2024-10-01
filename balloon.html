@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1671.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px '.SF NS Text'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #0f62ff}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px '.SF NS Text'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #0f62ff; min-height: 18.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;Balloon Pop Game&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>body, html {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>overflow: hidden;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background-color: #87CEEB; /* Sky blue background */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-family: 'Arial', sans-serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>canvas {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display: block;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background-color: #f0f8ff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>#score {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>position: absolute;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>top: 10px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>left: 10px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size: 24px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color: #fff;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="score"&gt;Score: 0&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;canvas id="gameCanvas"&gt;&lt;/canvas&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const canvas = document.getElementById('gameCanvas');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const ctx = canvas.getContext('2d');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Set canvas size to fit the window</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>canvas.width = window.innerWidth;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>canvas.height = window.innerHeight;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>let balloons = [];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>let score = 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const balloonColors = ['#FF4500', '#FFD700', '#32CD32', '#4169E1', '#EE82EE'];</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Create a balloon object</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function createBalloon() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const radius = Math.random() * 30 + 20;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>x: Math.random() * (canvas.width - radius * 2) + radius,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>y: canvas.height + radius,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>radius: radius,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>speed: Math.random() * 2 + 1,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>color: balloonColors[Math.floor(Math.random() * balloonColors.length)],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>popped: false</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Function to draw balloons</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function drawBalloons() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>ctx.clearRect(0, 0, canvas.width, canvas.height);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>balloons.forEach((balloon, index) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!balloon.popped) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>ctx.beginPath();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>ctx.arc(balloon.x, balloon.y, balloon.radius, 0, Math.PI * 2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>ctx.fillStyle = balloon.color;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>ctx.fill();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>ctx.closePath();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Function to move balloons</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function moveBalloons() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>balloons.forEach((balloon, index) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>balloon.y -= balloon.speed;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Remove balloon if it goes off the top of the screen</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (balloon.y + balloon.radius &lt; 0) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>balloons.splice(index, 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Function to check if a balloon is touched/clicked</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function checkPop(x, y) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>balloons.forEach((balloon, index) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const distance = Math.sqrt((x - balloon.x) ** 2 + (y - balloon.y) ** 2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (distance &lt; balloon.radius &amp;&amp; !balloon.popped) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>score++;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>document.getElementById('score').textContent = 'Score: ' + score;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>balloon.popped = true; // Mark the balloon as popped</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setTimeout(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>balloons.splice(index, 1); // Remove the popped balloon after a delay</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>}, 100);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Add touch event listener</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>canvas.addEventListener('touchstart', function (event) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const touch = event.touches[0];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>checkPop(touch.clientX, touch.clientY);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Add mouse click event listener</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>canvas.addEventListener('click', function (event) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>checkPop(event.clientX, event.clientY);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Game loop to spawn, move, and draw balloons</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function gameLoop() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Spawn balloons randomly</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (Math.random() &lt; 0.03) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>balloons.push(createBalloon());</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>moveBalloons();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>drawBalloons();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>requestAnimationFrame(gameLoop);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Start the game loop</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>gameLoop();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
